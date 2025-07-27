@@ -55,3 +55,7 @@ kubectl get pods
 kubectl get deployments
 kubectl logs -f <pod-name>
 ```
+8. Applied declarative configuration with YAML
+```
+kubectl apply -f https://raw.githubusercontent.com/Viktoriia-code/devops-with-kubernetes-2025/main/log_output/manifests/deployment.yaml
+```
