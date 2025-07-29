@@ -1,6 +1,6 @@
-# Exercise 1.2 - The project (todo app), step 1
+# Exercise 1.2 + 1.4 - The project (todo app)
 
-This is a simple web server application for Kubernetes exercise 1.2.
+This is a simple web server application for Kubernetes exercise 1.2 + 1.4.
 
 ## Task
 Create a web server that outputs "Server started in port NNNN" when it is started and deploy it into your Kubernetes cluster.
