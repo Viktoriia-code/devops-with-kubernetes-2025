@@ -1,4 +1,4 @@
-# Exercise 1.2 + 1.4 - The project (todo app)
+# Exercise 1.2 + 1.4 + 1.5 - The project (todo app)
 
 This is a simple web server application for Kubernetes exercise 1.2 + 1.4.
 

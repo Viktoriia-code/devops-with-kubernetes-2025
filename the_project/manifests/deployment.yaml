@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: the-project
-          image: vikikone/todo-app:v1
+          image: vikikone/todo-app:v1.5
           env:
             - name: PORT
               value: "3001"
