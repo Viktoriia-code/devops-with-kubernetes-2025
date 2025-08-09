@@ -1,16 +1,16 @@
 # Exercise 1.2 + 1.4 + 1.5 - The project (todo app)
 
-This is a simple web server application for Kubernetes exercise 1.2 + 1.4.
+This is a simple web server application for Kubernetes exercise 1.2 + 1.4 + 1.5.
 
 ## Task
-Create a web server that outputs "Server started in port NNNN" when it is started and deploy it into your Kubernetes cluster.
+Make the project respond something to a GET request sent to the / url of the project.
 
 ## Docker Image
 
 The Docker image is available at:  
 [`https://hub.docker.com/r/vikikone/todo-app`](https://hub.docker.com/r/vikikone/todo-app)
 
-Tag used: `vikikone/todo-app:v1`
+Tag used: `vikikone/todo-app:v1.5`
 
 ## Implementation Steps
 1. Created the Node.js app with Dockerfile
@@ -27,24 +27,27 @@ kubectl config use-context k3d-k3s-default
 ```
 4. Built the Docker image and pushed the image to Docker Hub:
 ```
-docker build -t vikikone/todo-app:v1 .
-docker push vikikone/todo-app:v1
+docker build -t vikikone/todo-app:v1.5 .
+docker push vikikone/todo-app:v1.5
 ```
 5. Deployed the app to the k3d Kubernetes cluster:
 ```
-kubectl create deployment todo-app --image=vikikone/todo-app:v1
+kubectl create deployment todo-app --image=vikikone/todo-app:v1.5
 ```
-6. Set the environment variable PORT 8080:
-```
-kubectl set env deployment/todo-app PORT=8080
-```
-7. Verified that the app is running:
-```
-kubectl logs <pod-name>
-```
-You should see: `Server started in port 8080`
-
-8. Applied declarative configuration with YAML
+6. Applied declarative configuration with YAML
 ```
 kubectl apply -f https://raw.githubusercontent.com/Viktoriia-code/devops-with-kubernetes-2025/main/the_project/manifests/deployment.yaml
 ```
+### Connecting from outside of the cluster
+7. Listed pods to find the pod the-project:
+```
+$ kubectl get po
+NAME                              READY   STATUS    RESTARTS       AGE
+the-project-8696d8d4c5-glznk      1/1     Running   0              42m
+```
+8. Forwarded local port 3001 to the pod’s port 3001:
+```
+$ kubectl port-forward the-project-8696d8d4c5-glznk 3001:3001
+```
+Now you can open this URL in your browser to access the app: http://localhost:3001/api/todos.
+This will show the API response from your running application inside the cluster.
