@@ -1,9 +1,7 @@
-# Exercise 1.2 + 1.4 + 1.5 - The project (todo app)
-
-This is a simple web server application for Kubernetes exercise 1.2 + 1.4 + 1.5.
+# Exercise 1.6 - The project (todo app)
 
 ## Task
-Make the project respond something to a GET request sent to the / url of the project.
+Use a NodePort Service to enable access to the project.
 
 ## Docker Image
 
