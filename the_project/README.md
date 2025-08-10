@@ -11,22 +11,31 @@ The Docker image is available at:
 Tag used: `vikikone/todo-app:v1.5`
 
 ## Implementation Steps
-1. Created the Node.js app with Dockerfile
+1. The Docket image was built and pushed previously.
 2. Deleted the previous cluster:
 ```
 k3d cluster delete
 ```
-3. Created a Kubernetes cluster using `k3d`:
+3. Created `service.yaml` file at the folder `manifests`
 ```
-k3d cluster create -a 2
-kubectl cluster-info
-k3d kubeconfig get k3s-default
-kubectl config use-context k3d-k3s-default
+apiVersion: v1
+kind: Service
+metadata:
+  name: the-project
+spec:
+  type: NodePort
+  selector:
+    app: the-project
+  ports:
+    - name: http
+      nodePort: 30080
+      protocol: TCP
+      port: 3004
+      targetPort: 3001
 ```
-4. Built the Docker image and pushed the image to Docker Hub:
+4. Created a Kubernetes cluster:
 ```
-docker build -t vikikone/todo-app:v1.5 .
-docker push vikikone/todo-app:v1.5
+k3d cluster create --port 3001:30080@agent:0 -p 3000:80@loadbalancer --agents 2
 ```
 5. Deployed the app to the k3d Kubernetes cluster:
 ```
@@ -34,18 +43,10 @@ kubectl create deployment todo-app --image=vikikone/todo-app:v1.5
 ```
 6. Applied declarative configuration with YAML
 ```
-kubectl apply -f https://raw.githubusercontent.com/Viktoriia-code/devops-with-kubernetes-2025/main/the_project/manifests/deployment.yaml
+kubectl apply -f manifests/deployment.yaml
+kubectl apply -f manifests/service.yaml
 ```
-### Connecting from outside of the cluster
-7. Listed pods to find the pod the-project:
-```
-$ kubectl get po
-NAME                              READY   STATUS    RESTARTS       AGE
-the-project-8696d8d4c5-glznk      1/1     Running   0              42m
-```
-8. Forwarded local port 3001 to the pod’s port 3001:
-```
-$ kubectl port-forward the-project-8696d8d4c5-glznk 3001:3001
-```
-Now you can open this URL in your browser to access the app: http://localhost:3001/api/todos.
-This will show the API response from your running application inside the cluster.
+
+You can now open this URL in your browser to access the app: http://localhost:3001/api/todos. 
+
+This will show the API response from your application running `outside` the Kubernetes cluster.
